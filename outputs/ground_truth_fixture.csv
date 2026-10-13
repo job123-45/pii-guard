@@ -1,0 +1,12 @@
+﻿case_id,source_text,gold_entity_type,gold_value,label_provenance,review_status
+GT-001,Contact at alex@example.com,EMAIL,alex@example.com,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-002,Phone: 212-555-0198,PHONE,212-555-0198,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-003,Employee ID: EMP-12345,EMPLOYEE_ID,EMP-12345,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-004,Account number: 123456789012,ACCOUNT_NUMBER,123456789012,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-005,SSN: 123-45-6789,GOVERNMENT_ID,123-45-6789,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-006,Name: Jane Doe,PERSON,Jane Doe,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-007,"Address: 42 Main Street, Sampletown",ADDRESS,"42 Main Street, Sampletown",Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-008,FYI email not supplied,,,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-009,"Financial figure: $1,234,567.89",,,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-010,Risk score 1234567890,,,Hand-authored expectation for synthetic detector fixture,Reviewed
+GT-011,Task Name: Legal Risk Identified,,,Hand-authored expectation for synthetic detector fixture,Reviewed

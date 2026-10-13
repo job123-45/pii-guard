@@ -1,0 +1,14 @@
+{
+  "tp": 7,
+  "fp": 0,
+  "fn": 0,
+  "tn": 4,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "labelled_cases": 11,
+  "expected_instances": 7,
+  "predicted_instances": 7,
+  "dataset": "ground_truth_fixture.csv",
+  "scope": "synthetic deterministic fixture only; not sample-document performance"
+}

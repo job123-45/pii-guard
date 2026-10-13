@@ -1,0 +1,6 @@
+Name: Jane Doe
+Employee ID: EMP-12345
+Email: alex@example.test
+Phone: 212-555-0198
+Account number: 123456789012
+SSN: 123-45-6789

@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.streamlit/secrets.toml
+.env
+*.py[cod]
+sample_inputs/
+Case Study Brief.pdf
+outputs/*
+!outputs/testing_report.md
+!outputs/demo_script.md
+!outputs/Optiv_PII_Guard_Stakeholder_Briefing_QA_Validated.pptx
+!outputs/ground_truth_fixture.csv
+!outputs/labelled_fixture_case_results.csv
+!outputs/labelled_fixture_metrics.json
+work/
+docs/demo_script.md
+docs/testing_report.md
