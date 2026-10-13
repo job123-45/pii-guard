@@ -76,12 +76,30 @@ def _render_styles():
         .upload-intro p { color:var(--muted); margin:.3rem 0 .65rem; font-size:.86rem; }
         [data-testid="stFileUploader"] { border:1px dashed #cbd4e1; border-radius:14px; background:#fafbfd; padding:.6rem; }
         [data-testid="stFileUploader"] section { border:0; background:transparent; }
-        [data-testid="stFileUploader"] button, .stButton button { border-radius:10px !important; }
+        [data-testid="stFileUploader"] button,
+        [data-testid="stFileUploaderDropzone"] button,
+        [data-testid="stFileUploader"] [data-testid="stBaseButton-secondary"] {
+            background:#f47b3a !important; background-color:#f47b3a !important;
+            color:#ffffff !important; border:1px solid #f47b3a !important;
+            border-radius:10px !important; font-weight:700 !important;
+        }
+        [data-testid="stFileUploader"] button *,
+        [data-testid="stFileUploaderDropzone"] button * { color:#ffffff !important; fill:#ffffff !important; }
+        [data-testid="stFileUploader"] button:hover,
+        [data-testid="stFileUploaderDropzone"] button:hover {
+            background:#dd5d25 !important; background-color:#dd5d25 !important;
+            color:#ffffff !important; border-color:#dd5d25 !important;
+        }
+        [data-testid="stFileUploader"] button:focus-visible,
+        [data-testid="stFileUploaderDropzone"] button:focus-visible {
+            outline:3px solid rgba(244,123,58,.3) !important; outline-offset:2px;
+        }
+        .stButton button { border-radius:10px !important; }
         .stButton button[kind="primary"], .stDownloadButton button[kind="primary"] { background:var(--orange); border-color:var(--orange); }
         [data-testid="stMetric"] { background:var(--paper); border:1px solid var(--line); border-radius:16px;
             padding:1rem 1.15rem; box-shadow:0 5px 18px rgba(28,45,70,.035); }
         [data-testid="stMetricLabel"] { color:#748198 !important; font-size:.76rem; font-weight:600; }
-        [data-testid="stMetricValue"] { color:var(--ink); font:800 1.8rem 'Manrope',sans-serif; }
+        [data-testid="stMetricValue"] { color:var(--ink); font:800 1.8rem 'Aptos Display','Segoe UI',sans-serif; }
         [data-testid="stAlert"] { border-radius:14px; border-width:1px; }
         div[data-testid="stExpander"] { background:#fff; border:1px solid var(--line); border-radius:14px; }
         [data-testid="stDataFrame"], [data-testid="stDataEditor"] { border:1px solid var(--line); border-radius:13px; overflow:hidden; }
@@ -318,10 +336,10 @@ if uploads:
     with download_right:
         audit_left, audit_right = st.columns(2)
         audit_left.download_button(
-            "Audit JSON", audit_json(findings, reveal), "pii_audit.json", "application/json", use_container_width=True
+            "Download audit JSON", audit_json(findings, reveal), "pii_audit.json", "application/json", use_container_width=True
         )
         audit_right.download_button(
-            "Audit CSV", audit_csv(findings, reveal), "pii_audit.csv", "text/csv", use_container_width=True
+            "Download audit CSV", audit_csv(findings, reveal), "pii_audit.csv", "text/csv", use_container_width=True
         )
     st.caption("Exports contain sanitized extracted text only; the uploaded PDF, Word or PowerPoint source is not modified.")
 else:
