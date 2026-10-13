@@ -2,6 +2,7 @@ from pathlib import Path
 from .models import Segment, Finding
 from .validators import validate_upload
 from .detection.pii_engine import detect_pii
+from .detection.ner_detector import person_ner_status
 from .redaction.text_redactor import redact_text
 from .gateway import decide_gateway, GatewayDecision
 from .extractors.pdf_extractor import extract_pdf
@@ -27,12 +28,17 @@ def process_uploads(files: list[tuple[str,bytes]], detection_ok: bool=True, vali
         except Exception as exc:
             errors.append(f"{name}: extraction failed: {exc}")
             segments.append(Segment(name,"file","failed","","failed",True))
+    contextual_ner_available, ner_message = person_ner_status()
+    effective_detection_ok = detection_ok and contextual_ner_available
+    if not contextual_ner_available:
+        errors.append(f"Contextual person-name NER unavailable: {ner_message}")
+
     if detection_ok:
         try:
             findings=detect_pii(segments)
         except Exception as exc:
             errors.append(f"PII detection failed: {exc}")
-            detection_ok=False
+            effective_detection_ok=False
             findings=[]
     else:
         findings=[]
@@ -42,5 +48,5 @@ def process_uploads(files: list[tuple[str,bytes]], detection_ok: bool=True, vali
         decisions={(f.filename,f.start,f.end):f.reviewed for f in fs}
         redacted.append((seg,redact_text(seg.text,fs,decisions)))
     output="\n\n".join(f"[{s.filename} | {s.location}]\n{t}" for s,t in redacted if s.status=="ok")
-    gateway=decide_gateway(segments,findings,output,errors,detection_ok,validation_ok)
+    gateway=decide_gateway(segments,findings,output,errors,effective_detection_ok,validation_ok)
     return segments,findings,redacted,gateway,errors

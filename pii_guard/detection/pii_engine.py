@@ -18,11 +18,23 @@ def detect_pii(segments: list[Segment]) -> list[Finding]:
                     while start<end and seg.text[start].isspace(): start+=1
                     value=seg.text[start:end]
                 candidates.append(Finding(entity,value,confidence,"regex-context" if entity in {"PERSON","ADDRESS"} else "regex",seg.filename,seg.location,start,end,confidence<.85))
-        candidates.sort(key=lambda f:(f.start,-f.confidence,-(f.end-f.start)))
-        accepted=[]
-        for f in candidates:
-            if accepted and f.start < accepted[-1].end:
-                if f.confidence>accepted[-1].confidence: accepted[-1]=f
-            else: accepted.append(f)
-        out.extend(accepted)
+        # Collapse exact duplicates first (a labelled-name rule and spaCy can
+        # identify the same span), then prefer higher-confidence spans when
+        # distinct detector results overlap.
+        unique = {}
+        for finding in candidates:
+            key = (finding.entity_type, finding.start, finding.end, finding.value)
+            current = unique.get(key)
+            if current is None or finding.confidence > current.confidence:
+                unique[key] = finding
+
+        chosen = []
+        for finding in sorted(
+            unique.values(),
+            key=lambda f: (-f.confidence, f.start, -(f.end - f.start), f.entity_type),
+        ):
+            if any(finding.start < prior.end and prior.start < finding.end for prior in chosen):
+                continue
+            chosen.append(finding)
+        out.extend(sorted(chosen, key=lambda f: (f.start, f.end)))
     return out

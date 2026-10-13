@@ -10,8 +10,18 @@ Requires Python 3.11+ and (for scanned PDF OCR) Tesseract OCR 5.x. The app check
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+# Install the English person-name model used for contextual NER
+python -m spacy download en_core_web_sm
+# Confirm that the local model can be loaded
+python -c "import spacy; spacy.load('en_core_web_sm'); print('NER model ready')"
 streamlit run app.py
 ```
+
+spaCy and its language model are separate setup steps. The application does not
+download models implicitly. The sidebar reports whether `en_core_web_sm` is
+available. If it is missing, contextual person-name detection is unavailable and
+the privacy gateway blocks release; existing labelled-name and pattern findings
+are still redacted in the prepared text.
 
 Install Tesseract separately and add its executable to PATH (Windows: `winget install --id UB-Mannheim.TesseractOCR --exact`; macOS: `brew install tesseract`; Debian/Ubuntu: `sudo apt-get install tesseract-ocr`). Restart the terminal and verify with `tesseract --version`. OCR runs locally; OCR failure blocks gateway release.
 
@@ -23,7 +33,7 @@ Run checks with `python -m pytest -q`. The provided Python environment may requi
 - DOCX: paragraphs and tables; embedded images are flagged for manual review.
 - PPTX: text shapes and tables; image shapes are flagged for manual review.
 - TXT: UTF-8 extraction.
-- Rule-based detectors cover email, phone, labeled employee/account/government IDs, addresses and explicitly labeled names. This prototype has no downloadable NER model; rule coverage is not comprehensive.
+- Detectors cover email, phone, labeled employee/account/government IDs, addresses, explicitly labeled names, and contextual `PERSON` entities from spaCy `en_core_web_sm`. NER hits are candidates and always require human review. A name model is imperfect: it can miss names and can mark non-name text as a person, so an empty finding list is not evidence that a document contains no names.
 - Redaction is applied to extracted text only. Source PDF/DOCX/PPTX files are not rewritten. Use sanitized text export, and do not treat it as source-document sanitization.
 - No original text is sent to an external model. “Allow” represents only a simulated handoff of sanitized text.
 - An empty findings list is not proof of absence of PII.

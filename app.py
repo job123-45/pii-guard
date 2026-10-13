@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from pii_guard.extractors.ocr_engine import ocr_available
+from pii_guard.detection.ner_detector import person_ner_status
 from pii_guard.gateway import decide_gateway
 from pii_guard.pipeline import process_uploads
 from pii_guard.redaction.text_redactor import redact_text
@@ -157,6 +158,14 @@ with st.sidebar:
         st.caption("Scanned pages will fail closed until OCR is available.")
     st.divider()
     st.caption("Cadence Financial Group · Internal privacy review")
+    st.divider()
+    ner_available, ner_message = person_ner_status()
+    st.markdown("**Person-name detection**")
+    if ner_available:
+        st.success("Contextual NER ready", icon="🧠")
+    else:
+        st.error("Contextual NER unavailable", icon="⚠️")
+    st.caption(ner_message)
 
 st.markdown(
     '<section class="hero"><div class="hero-copy">'
